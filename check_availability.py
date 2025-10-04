@@ -32,14 +32,19 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 
 def send_telegram_message(message: str):
-    """Send message via Telegram bot"""
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    data = {"chat_id": TELEGRAM_CHAT_ID, "text": message}
+    payload = {
+        "chat_id": TELEGRAM_CHAT_ID,
+        "text": message
+    }
     try:
-        r = requests.post(url, data=data)
-        r.raise_for_status()
+        resp = requests.post(url, json=payload, timeout=10)
+        resp.raise_for_status()
+        result = resp.json()
+        if not result.get("ok", False):
+            print("Telegram API returned error:", result.get("error_code"), result.get("description"))
     except Exception as e:
-        print("Failed to send Telegram message:", e)
+        print("Exception sending Telegram message:", e)
 
 
 def main():
