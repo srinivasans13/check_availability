@@ -39,7 +39,7 @@ def send_telegram_message(message: str):
     }
     try:
         resp = requests.post(url, json=payload, timeout=10)
-        print(resp.status_code, resp.text)
+        #print(resp.status_code, resp.text)
         resp.raise_for_status()
         result = resp.json()
         if not result.get("ok", False):
