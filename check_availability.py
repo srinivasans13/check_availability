@@ -1,0 +1,65 @@
+import os
+import requests
+
+# --- Config ---
+URL = "https://cttrainsapi.confirmtkt.com/api/v1/availability/fetchAvailability"
+params = {
+    "trainNo": "06555",
+    "travelClass": "3A",
+    "quota": "GN",
+    "sourceStationCode": "KJM",
+    "destinationStationCode": "CGY",
+    "dateOfJourney": "31-10-2025",
+    "enableTG": "true",
+    "tGPlan": "CTG-A9",
+    "showTGPrediction": "false",
+    "tgColor": "DEFAULT",
+    "showPredictionGlobal": "true",
+    "showNewMealOptions": "true"
+}
+
+headers = {
+    "Content-Type": "application/json",
+    "Accept": "*/*",
+    "Clientid": "ct-web",
+    "Ct-Token": os.getenv("CT_TOKEN"),
+    "Ct-Userkey": os.getenv("CT_USERKEY"),
+    "Apikey": os.getenv("CT_APIKEY"),
+}
+
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+
+
+def send_telegram_message(message: str):
+    """Send message via Telegram bot"""
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    data = {"chat_id": TELEGRAM_CHAT_ID, "text": message}
+    try:
+        r = requests.post(url, data=data)
+        r.raise_for_status()
+    except Exception as e:
+        print("Failed to send Telegram message:", e)
+
+
+def main():
+    response = requests.post(URL, headers=headers, params=params)
+    response.raise_for_status()
+    data = response.json()
+
+    status = None
+    for item in data["data"]["avlDayList"]:
+        if item["availablityDate"] == "31-10-2025":
+            status = item["availablityStatus"]
+            break
+
+    if status:
+        message = f"🚆 Train 06555 (3A) availability for 31-10-2025: {status}"
+        print(message)
+        send_telegram_message(message)
+    else:
+        send_telegram_message("No availability info found for 31-10-2025.")
+
+
+if __name__ == "__main__":
+    main()
