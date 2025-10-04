@@ -2,7 +2,7 @@ name: Confirmtkt Availability Checker
 
 on:
   schedule:
-    - cron: "0 * * * *"  # runs every hour
+    - cron: "* * * * *"  # ⏱️ runs every 1 minute
   workflow_dispatch:
 
 jobs:
