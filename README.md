@@ -1,5 +1,4 @@
 
-````markdown
 # 🚆 ConfirmTkt Train Availability Checker (GitHub Actions + Telegram Alerts)
 
 This project automatically checks **train seat availability** using the ConfirmTkt API and sends a **Telegram alert** when seats become available.
@@ -23,7 +22,7 @@ It runs on a **GitHub Actions runner** every hour — fully automated, no manual
 ```bash
 git clone https://github.com/<your-username>/confirmtkt-checker.git
 cd confirmtkt-checker
-````
+
 
 ### 2. Create a Telegram Bot
 
