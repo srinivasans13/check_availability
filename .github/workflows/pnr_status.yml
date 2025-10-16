@@ -1,8 +1,8 @@
 name: IndianRail PNR Status Monitor
 
 on:
-  schedule:
-    - cron: "0 * * * *"  # runs every hour
+  #schedule:
+  #  - cron: "0 * * * *"  # runs every hour
   workflow_dispatch:
 
 jobs:
